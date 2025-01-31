@@ -1,0 +1,27 @@
+---
+title: "Homework 1"
+number-sections: false
+---
+
+## Exercise 1: Warming up
+My favorite food at *Cafe Mac* is **Chicken**!
+![CHICKEN](/Users/owenlindstrom/Documents/2025/Stat 112/portfolio-Owen298628/Homeworks/chicken.png)
+## Exercise 2: Import tidy data
+# Import the data
+```{r}
+survey <- read.csv("https://hash-mac.github.io/stat112site-s25/data/survey.csv")
+```
+
+## Exercise 3: Tidy data properties
+
+
+## Exercise 4: Get to know the data
+
+
+## Exercise 5: Data structure
+
+
+## Exercise 6: Your turn
+
+
+## Exercise 7: Brainstorm
