@@ -655,4 +655,29 @@ heatmap.2(plot_data,
 
 #### Part a {-}
 
-MN is high on the SAT performance related metrics and low on everything else. MN is similar t
+MN is high on the SAT performance related metrics and low on everything else. MN is similar to Iowa, Kansas, Mississippi, Missouri, the Dakotas...
+
+```{r fig.width = 10, fig.height = 20}
+stars(plot_data,
+  flip.labels = FALSE,
+  key.loc = c(10, 1.5),
+  cex = 1, 
+  draw.segments = TRUE
+)
+```
+
+#### Part b {-}
+
+When the states are in geographical ordering, we'd notice more easily that states in similar regions of the U.S. have similar patterns of these variables.
+
+```{r fig.width = 10, fig.height = 10}
+stars(plot_data,
+  flip.labels = FALSE,
+  locations = data.matrix(as.data.frame(state.center)),  # added external data to arrange by geo location
+  key.loc = c(-110, 28),
+  cex = 1, 
+  draw.segments = TRUE
+)
+```
+
+</details>
