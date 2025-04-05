@@ -31,15 +31,25 @@ Address each prompt below using our wrangling tools.
 
 ```{r}
 # How many total births were there in the U.S. during this time period?
-
+total_births <- sum(Birthdays$births)
+total_births
+#70486538
 
 # Show the 6 data points with the fewest number of births
 # (What do these have in common?!)
-
+fewest <- Birthdays %>%
+  arrange(births) %>%
+  head(6)
+fewest
+#All of them happened on the first day of the month, either March, July, or October first in either 1973 or 1974
 
 # February 29, "leap day", occurs once every 4 years
 # Report data on leap day births in Alaska (AK) during this time period
 # Your dataset should have 5 rows!
+leap_day_AK <- Birthdays %>%
+  filter(state == "AK", month == 2, day == 29)
+leap_day_AK
+
 
 ```
 
@@ -48,10 +58,23 @@ Address each prompt below using our wrangling tools.
 ```{r}
 # Show the 6 states with the most total births during this time period
 # (your answer should indicate both the state and its number of births)
+top_states <- Birthdays %>%
+  group_by(state) %>%
+  summarize(total_births = sum(births)) %>%
+  arrange(desc(total_births)) %>%
+  head(6)
+top_states
 
 
 # Show the 6 states with the fewest total births in 1988
 # (your answer should indicate both the state and its number of births)
+fewest_1988 <- Birthdays %>%
+  filter(year == 1988) %>%
+  group_by(state) %>%
+  summarize(total_births = sum(births)) %>%
+  arrange(total_births) %>%
+  head(6)
+fewest_1988
 
 ```
 
