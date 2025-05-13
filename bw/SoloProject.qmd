@@ -14,11 +14,11 @@ library(stringr)
 ```
 
 ```{r Crime Data Load}
-crime_data <- read_excel("/Users/owenlindstrom/Documents/2025/Stat 112/Solo Project.xlsx")
+crime_data <- read_excel("Solo Project.xlsx")
 ```
 
 ```{r Map Data Load}
-tx_counties <- st_read("/Users/owenlindstrom/Documents/2025/Stat 112/Final Project/project-the-stat-stackers/data/Tx_CntyBndry_Jurisdictional_TIGER.shp")
+tx_counties <- st_read("Tx_CntyBndry_Jurisdictional_TIGER.shp")
 ```
 
 ```{r Clean Crime Data} 
