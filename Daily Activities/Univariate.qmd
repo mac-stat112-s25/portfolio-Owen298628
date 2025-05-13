@@ -1,0 +1,89 @@
+# Import data
+```{r}
+hikes <- read.csv("https://mac-stat.github.io/data/high_peaks.csv")
+```
+
+##Excercise 1
+```{r}
+head(hikes)
+```
+a. The frequency of each catagory in the data set probably a bar chart
+b. It would effectively show the spread of elevation across the mountains
+
+##Excercise 2
+```{r}
+ggplot(hikes, aes(x = factor(rating, levels = c("easy", "moderate", "difficult")))) +
+  geom_bar()
+```
+
+
+##Excercise 3
+```{r}
+count(hikes, rating)
+```
+1. 8 difficult, 11 easy, and 27 moderate hikes.
+2. The hikes are not evenly distributed since their are more moderate hikes and less easy and difficult hikes.
+
+
+##Excercise 4
+```{r}
+# 
+ggplot(hikes, aes(x = rating)) +
+  geom_bar()
+```
+
+```{r}
+# COMMENT on the change in the code and the corresponding change in the plot
+ggplot(hikes, aes(x = rating)) +
+  geom_bar() +
+  labs(x = "Rating", y = "Number of hikes")
+```
+
+```{r}
+# COMMENT on the change in the code and the corresponding change in the plot
+ggplot(hikes, aes(x = rating)) +
+  geom_bar(fill = "blue") +
+  labs(x = "Rating", y = "Number of hikes")
+```
+
+```{r}
+# COMMENT on the change in the code and the corresponding change in the plot
+ggplot(hikes, aes(x = rating)) +
+  geom_bar(color = "orange", fill = "blue") +
+  labs(x = "Rating", y = "Number of hikes")
+```
+
+```{r}
+# COMMENT on the change in the code and the corresponding change in the plot
+ggplot(hikes, aes(x = rating)) +
+  geom_bar(color = "orange", fill = "blue")  +
+  labs(x = "Rating", y = "Number of hikes") +
+  theme_minimal()
+```
+
+
+##Excercise 5
+
+
+##Excercise 6
+
+
+##Excercise 7
+
+
+##Excercise 8
+
+
+##Excercise 9
+
+
+##Excercise 10
+
+
+##Excercise 11
+
+
+##Excercise 12
+
+
+##Excercise 13

@@ -2,4 +2,89 @@
 title: "Spatial Viz"
 ---
 
-Use this file to generate a professional looking **spatial** visualization.  The visualization will not perfect the first time but you are expected to improve on it throughout the semester especially after covering advanced topics such as effective viz.
+```{r}
+library(dplyr)
+library(RColorBrewer)
+library(ggplot2)
+library(tidyverse)
+library(leaflet)
+library(gplots)
+library(rnaturalearth)
+library(mosaic)
+library(sf)
+library(maps)
+elections_by_state <-  read.csv("https://mac-stat.github.io/data/election_2020_by_state.csv")
+elections_by_counties <- read.csv("https://mac-stat.github.io/data/election_2020_county.csv")
+```
+
+```{r}
+starbucks <- read.csv("https://mac-stat.github.io/data/starbucks.csv")
+states_map <- map_data("state")
+```
+
+```{r}
+
+elections_by_state <- elections_by_state |> 
+  filter(state_abbr != "DC") |> 
+  select(state_name, state_abbr, repub_pct_20) |> 
+  mutate(repub_20_categories = 
+           cut(repub_pct_20, 
+               breaks = seq(30, 70, by = 5), 
+               labels = c("30-34", "35-39", "40-44", "45-49",
+                          "50-54", "55-59", "60-64", "65-70"), 
+               include.lowest = TRUE))
+
+elections_by_counties <- elections_by_counties |> 
+  select(state_name, state_abbr, county_name, county_fips,
+          repub_pct_20, median_age, median_rent) |> 
+  mutate(repub_20_categories = 
+           cut(repub_pct_20, 
+               breaks = seq(0, 100, by = 10),
+               labels = c("0-9", "10-19", "20-29", "30-39", "40-49",
+                          "50-59", "60-69", "70-79", "80-89", "90-100"),
+               include.lowest = TRUE))
+```
+
+
+
+```{r}
+starbucks_us <- starbucks |> 
+  filter(Country == "US")
+
+starbucks_us_mainland <- starbucks_us %>% 
+  filter(!State.Province %in% c("HI", "AK"))
+
+elections_by_state_mainland <- elections_by_state %>% 
+  filter(!state_name %in% c("hawaii", "alaska"))
+
+states_map_mainland <- states_map %>% 
+  filter(!region %in% c("hawaii", "alaska"))
+
+ggplot(elections_by_state_mainland, aes(map_id = state_name, fill = repub_20_categories)) +
+  geom_map(map = states_map_mainland) +
+  geom_point(
+    data = starbucks_us_mainland,
+    aes(x = Longitude, y = Latitude),
+    size = 0.3,
+    alpha = 0.3,
+    inherit.aes = FALSE
+  ) +
+  expand_limits(x = states_map_mainland$long, y = states_map_mainland$lat) +
+  scale_fill_manual(
+    values = rev(brewer.pal(8, "RdBu")),
+    name = "Republican Vote Share (%)"
+  ) +
+  labs(
+    title = "U.S. 2020 Vote Share by State with Starbucks Locations",
+    caption = "Source: U.S. Election Data and Starbucks Store Locations | By Owen Lindstrom | Created on April 1, 2025"
+  ) +
+  theme_void(base_size = 13) + 
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    legend.position = "bottom",
+    legend.title = element_text(size = 12, face = "bold"),
+    legend.text = element_text(size = 10),
+    plot.caption = element_text(size = 10, hjust = 0.5, margin = margin(t = 10))
+  )
+
+```

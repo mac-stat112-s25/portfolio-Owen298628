@@ -2,4 +2,46 @@
 title: "Univariate Viz"
 ---
 
-Use this file to generate a professional looking **univariate** visualization. The visualization will not perfect the first time but you are expected to improve on it throughout the semester especially after covering advanced topics such as effective viz.
+```{r}
+# Load packages we'll need for HW 2: tidyverse, mosaic, fivethirtyeight (mosaicData will be loaded automatically when loading the mosaic package)
+library(mosaic)
+library(mosaicData)
+library(fivethirtyeight)
+library(tidyverse)
+```
+
+```{r}
+data("Birthdays")
+daily_births <- Birthdays |> 
+  group_by(date) |> 
+  summarize(births = sum(births)) |> 
+  mutate(year = year(date), 
+         month = month(date, label = TRUE),
+         day_of_month = mday(date),
+         day_of_week = wday(date, label = TRUE))
+```
+
+```{r}
+ggplot(daily_births, aes(x = births)) +
+  geom_histogram(
+    fill = "skyblue",
+    color = "white",
+    binwidth = 100
+  ) +
+  labs(
+    title = "Distribution of Daily Births in the U.S. (1978–1988)",
+    x = "Number of Births per Day",
+    y = "Frequency (Number of Days)",
+    caption = "Source: fivethirtyeight Birthdays Dataset | By Owen Lindstrom | Created on March 9, 2025"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    axis.title = element_text(size = 13),
+    axis.text = element_text(size = 11),
+    plot.caption = element_text(size = 10, hjust = 0.5, margin = margin(t = 10))
+  )
+
+```
+
+

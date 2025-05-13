@@ -1,0 +1,105 @@
+---
+title: "Exam 1"
+format: html
+---
+
+```{r}
+library(tidytuesdayR)
+library(tidyverse)
+library(dplyr)
+library(RColorBrewer)
+library(ggplot2)
+library(tidyverse)
+library(leaflet)
+library(gplots)
+library(rnaturalearth)
+library(mosaic)
+library(sf)
+library(maps)
+```
+
+```{r}
+tuesdata <- tt_load('2020-02-18')
+fc <- tuesdata$food_consumption
+```
+
+```{r}
+library(ggplot2)
+
+# Bar Graph showing overall food consumption and food category correlation
+ggplot(fc, aes(x = food_category, y = consumption)) +
+  geom_bar(stat = "identity", fill = "purple") +
+  theme_minimal() +
+  labs(title = "Food Consumption by Category",
+       x = "Food Category",
+       y = "Consumption") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  
+```
+
+```{r}
+#Boxplot showing relationship between overall food consumption and country
+ggplot(fc, aes(x = country, y = consumption)) +  
+  geom_boxplot(fill = "darkorange", color = "black") +  
+  theme_minimal() +
+  labs(title = "Distribution of Food Consumption",
+       x = "Country",
+       y = "Consumption") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 3.5))
+```
+
+```{r}
+# Summarize data to get total consumption per country per food category
+fc_summary <- fc |>
+  group_by(country, food_category) |>
+  summarize(total_consumption = sum(consumption, na.rm = TRUE), .groups = "drop")
+
+#Get world map
+world <- ne_countries(scale = "medium", returnclass = "sf") |>
+  select(name, geometry) |>
+  rename(country = name) #Renames a column (new name to old name) syntax
+
+fc_map_data <- world |>
+  right_join(fc_summary, by = "country") 
+
+fc_map_data <- fc_map_data |>
+  filter(!is.na(geometry))
+```
+
+```{r}
+#Map Visualization
+ggplot(fc_map_data) +
+  geom_sf(aes(fill = total_consumption), color = "white") +
+  scale_fill_viridis_c(option = "plasma", name = "Consumption", na.value = "grey80") + #Color friendly palette
+  theme_minimal() +
+  labs(title = "Food Consumption by Country and Category", 
+    subtitle = "Total food consumption across different countries, displayed by category",
+    caption = "Source: TidyTuesday 2020-02-18 | Data on global food consumption, Plot by: Rachel Kelly, 3/7/2025",
+    alt = "A world map showing food consumption by country and category. Each country is color-coded based on total consumption, with different facets representing various food categories.") + #Accessible labeling
+  facet_wrap(~food_category, ncol = 3) #make the facets
+
+
+```
+
+```{r}
+fc_stacked <- fc |>
+  group_by(food_category) |>
+  mutate(category_total = sum(consumption, na.rm = TRUE)) |>
+  ungroup() |>
+  mutate(percent = (consumption / category_total) * 100)
+
+# Plot stacked bar graph
+ggplot(fc_stacked, aes(x = food_category, y = consumption, fill = percent)) +
+  geom_bar(stat = "identity", position = "fill") + 
+  geom_text(aes(label = country), 
+            position = position_fill(vjust = 0.5), 
+            size = 1, color = "white", check_overlap = TRUE) +
+  scale_fill_viridis_c(option = "plasma", name = "Country % of Consumption") +
+  theme_minimal() +
+  labs(title = "Food Consumption by Category",
+       x = "Food Category",
+       y = "Consumption (Proportion of Total)", 
+       caption = "Source: TidyTuesday 2020-02-18 - Data on global food consumption",
+       alt = "A stacked bar chart showing food consumption by category. Each bar is divided into country proportions, with labels inside indicating the country names.") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+

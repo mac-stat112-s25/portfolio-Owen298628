@@ -2,4 +2,63 @@
 title: "Quadvariate Viz"
 ---
 
-Use this file to generate a professional looking **quadvariate** visualization.  The visualization will not perfect the first time but you are expected to improve on it throughout the semester especially after covering advanced topics such as effective viz.
+
+```{r}
+library(mosaic)
+data("Birthdays")
+head(Birthdays)
+```
+
+
+```{r}
+daily_births <- Birthdays %>%
+  group_by(date) %>%
+  summarize(total = sum(births)) %>%
+  mutate(year = lubridate::year(date),
+         week_day = lubridate::wday(date, label=TRUE),
+         month_day = lubridate::day(date))
+```
+
+```{r}
+library(lubridate)
+
+holidays <- read.csv("https://mac-stat.github.io/data/US-Holidays.csv") |>
+  mutate(date = as.POSIXct(dmy(date)))
+
+daily_births_1980 <- daily_births %>%
+  filter(year == 1980) %>%
+  left_join(holidays, by = "date") %>%
+  mutate(is_holiday = !is.na(holiday))
+```
+
+```{r}
+daily_births_1980 %>%
+  ggplot(aes(x = date, y = total, color = week_day, shape = is_holiday)) +
+  geom_point(size = 2) +
+  geom_text(
+    data = filter(daily_births_1980, is_holiday),
+    aes(label = holiday),
+    angle = 40,
+    vjust = -0.5,
+    hjust = 1, 
+    size = 3
+  ) +
+  expand_limits(x = as.POSIXct("1980-12-31")) +
+  labs(
+    title = "Daily U.S. Births in 1980 with Highlighted Holidays",
+    x = "Date",
+    y = "Total Number of Births",
+    color = "Day of the Week",
+    shape = "Holiday Indicator",
+    caption = "Source: U.S. Birthdays and Holidays Data | By Owen Lindstrom | Created on April 21, 2025"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    axis.title = element_text(size = 13),
+    axis.text = element_text(size = 11),
+    plot.caption = element_text(size = 10, hjust = 0.5, margin = margin(t = 10)),
+    legend.position = "bottom"
+  )
+
+```
