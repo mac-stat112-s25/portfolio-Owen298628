@@ -4,7 +4,7 @@ project:
 
 book:
   title: "COMP/STAT112 Notebook"
-  author: "Your Name Here"
+  author: "Owen Lindstrom"
   date: today
   reader-mode: true
   page-navigation: true
@@ -13,7 +13,7 @@ book:
   
   
   sidebar:
-    title: "Your Name Here"
+    title: "Owen Lindstrom"
     collapse-level: 2
     style: "docked"
     pinned: true
@@ -37,6 +37,15 @@ book:
       - ica/ica-bi.qmd
       - ica/ica-multi.qmd
       - ica/ica-spatial.qmd
+      
+    - part: "Solo Project"
+      chapters:
+      - bw/SoloProject.qmd
+      
+    - part: "Exams"
+      chapters: 
+      - ica/Exam1.qmd
+      - ica/Exam2.qmd
 
 format:
   html:
@@ -51,10 +60,14 @@ format:
     code-link: true
     code-line-numbers: true
     code-tools: true
+    echo: false
+    warning: false
+    message: false
+    include-code: false
 
 execute:
   cache: false
-  freeze: auto
+  freeze: false
 
 editor: 
   markdown:

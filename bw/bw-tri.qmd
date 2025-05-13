@@ -2,4 +2,48 @@
 title: "Trivariate Viz"
 ---
 
-Use this file to generate a professional looking **trivariate** visualization.  The visualization will not perfect the first time but you are expected to improve on it throughout the semester especially after covering advanced topics such as effective viz.
+```{r}
+library(tidyverse)
+library(lubridate)
+
+
+trips <- readRDS(gzcon(url("https://mac-stat.github.io/data/2014-Q4-Trips-History-Data-Small.rds"))) %>% 
+  select(client, sstation, sdate, duration) %>% 
+  mutate(duration = as.numeric(hms(duration))/60) %>%
+  mutate(
+    s_date = as_date(sdate),
+    s_day_of_week = wday(sdate, label = TRUE),
+    s_hour = hour(sdate),
+    s_minute = minute(sdate),
+    s_time_of_day = s_hour + s_minute / 60
+  )
+
+
+trips %>%
+  ggplot(aes(x = s_time_of_day)) +
+  geom_histogram(
+    binwidth = 1,
+    fill = "#4682B4",
+    color = "white",
+    boundary = 0
+  ) +
+  facet_wrap(~ s_day_of_week) +
+  labs(
+    title = "Bicycle Rentals by Time of Day and Day of Week (Q4 2014)",
+    x = "Time of Day (Hours)",
+    y = "Number of Rentals",
+    caption = "Source: Bikeshare Trip Data via Macalester Statistics | By Owen Lindstrom | Created on April 12, 2025"
+  ) +
+  theme_light(base_size = 13) +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    axis.title = element_text(size = 13),
+    axis.text = element_text(size = 11),
+    strip.text = element_text(size = 12, face = "bold"),
+    panel.grid.minor = element_blank(),
+    plot.caption = element_text(size = 10, hjust = 0.5, margin = margin(t = 10))
+  )
+
+```
+
+

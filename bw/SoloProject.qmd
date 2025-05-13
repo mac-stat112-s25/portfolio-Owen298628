@@ -1,5 +1,5 @@
 ---
-title: "SoloProject"
+title: "Solo Project"
 format: html
 ---
 
@@ -18,7 +18,7 @@ crime_data <- read_excel("/Users/owenlindstrom/Documents/2025/Stat 112/Solo Proj
 ```
 
 ```{r Map Data Load}
-tx_counties <- st_read("/Users/owenlindstrom/Documents/2025/Stat 112/Tx_CntyBndry_Jurisdictional_TIGER/Tx_CntyBndry_Jurisdictional_TIGER.shp")
+tx_counties <- st_read("/Users/owenlindstrom/Documents/2025/Stat 112/Final Project/project-the-stat-stackers/data/Tx_CntyBndry_Jurisdictional_TIGER.shp")
 ```
 
 ```{r Clean Crime Data} 
@@ -49,9 +49,10 @@ tx_counties_crime <- left_join(
 ggplot(tx_counties_crime) +
   geom_sf(aes(fill = CrimeRate), color = "white", size = 0.2) +
   labs(
-    title = "Texas Crime Rates by County",
-    fill = "Crime Rate"
-  ) +  scale_fill_gradient(low = "green2", high = "red")
+    title = "Texas Crime Rate per 100,000 People by County",
+    fill = ""
+  ) +  scale_fill_gradient(low = "green2", high = "red") +
+  theme_void()
 
 ```
 

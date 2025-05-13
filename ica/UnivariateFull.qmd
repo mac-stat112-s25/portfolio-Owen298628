@@ -337,13 +337,6 @@ I like the density plot more because I think it gives more information about the
 
 We *obviously* won't be done until we talk about communication. All code above has a similar *general* structure (where the details can change):
 
-```{r}
-#| eval: false
-
-ggplot(___, aes(x = ___)) + 
-  geom___(color = "___", fill = "___") + 
-  labs(x = "___", y = "___")
-```
 
 -   Though not *necessary* to the code working, it's common, good practice to *indent* or *tab* the lines of code after the first line (counterexample below). Why?
 
